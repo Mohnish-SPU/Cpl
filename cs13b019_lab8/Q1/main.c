@@ -1,7 +1,7 @@
 /*
 Author Mohnish
 
-version 1.0
+version 1.1
 
 Program to read a file and replace a word with another specified in the command line 
 with a flag to specify whether to do a case or case insensitive search.
@@ -12,8 +12,10 @@ with a flag to specify whether to do a case or case insensitive search.
 #include <stdio.h>
 #include <string.h>
 
+/*
 #define INPUT "input.txt"
 #define OUTPUT "output.txt"
+*/
 
 void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write);
 char* replaceLine( char *old_word, char *new_word, char *line);
@@ -37,16 +39,16 @@ char* replaceLine( char *old_word, char *new_word, char *line)
 	
 	new = strlen(old_word);
 	
-	for(i = 0; i &lt; new ; i++)
+	for(i = 0; i < new ; i++)
 	{
 		occur = occur + 1;
 	}
 	if( strstr( occur, old_word) != NULL)
-		replaceLine( old_word, new_world, occur);
+		replaceLine( old_word, new_word, occur);
 	else
 	{
-		strcat(final_line, occur );
-		return final_line;
+		strcat(line_final, occur );
+		return line_final;
 	}
 }
 
@@ -68,16 +70,16 @@ char* replaceLineCase( char *old_word, char *new_word, char *line)
 	
 	new = strlen(old_word);
 	
-	for(i = 0; i &lt; new ; i++)
+	for(i = 0; i < new ; i++)
 	{
 		occur = occur + 1;
 	}
 	if( strcasestr( occur, old_word) != NULL)
-		replaceLineCase( old_word, new_world, occur);
+		replaceLineCase( old_word, new_word, occur);
 	else
 	{
-		strcat(final_line, occur );
-		return final_line;
+		strcat(line_final, occur );
+		return line_final;
 	}
 }
 
@@ -88,13 +90,13 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 	size_t len = 0; 
 	ssize_t read1;
 	
-	while ((read1 = getline(&amp;line, &amp;len, read)) != -1)
+	while ((read1 = getline(&line, &len, read)) != -1)
 	{
 		if( flag == 1)
 		{
 			if( strstr( line, old_word) != NULL)
 			{
-				line = replaceLine( old_word, new_world, line);
+				line = replaceLine( old_word, new_word, line);
 			}
 			fprintf( write, "%s\n", line);
 		}
@@ -102,7 +104,7 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 		{
 			if( strcasestr( line, old_word) != NULL)
 			{
-				line = replaceLineCase( old_word, new_world, line);
+				line = replaceLineCase( old_word, new_word, line);
 			}
 			fprintf( write, "%s\n", line);
 		
@@ -112,7 +114,7 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 
 int
 main(
-	int argv,
+	int argc,
 	char *argv[]
 	)
 {
@@ -121,7 +123,7 @@ main(
 	if( read == NULL ) 
 	{
 		printf("File to be read can't be opened \n");
-		exit(1);
+		return 1;
 	}
 
 	FILE *write = fopen ( argv[5], "w");
@@ -129,7 +131,7 @@ main(
 	if( write == NULL ) 
 	{
 		printf("File to be written on can't be opened \n");
-		exit(2);
+		return 2 ;
 	}
 	
 	if( argc == 6)
@@ -145,13 +147,13 @@ main(
 		else
 		{
 			printf("Invalid first argument \n");
-			exit(4);
+			return 4;
 		}
 	} 
 	else
 	{
 		printf("Insufficient command line arguments \n");
-		exit(3);
+		return 3;
 	}
 	fclose(read);
 	fflush(write);
