@@ -1,7 +1,7 @@
 /*
 Author Mohnish
 
-version 1.1
+version 1.2
 
 Program to read a file and replace a word with another specified in the command line 
 with a flag to specify whether to do a case or case insensitive search.
@@ -11,32 +11,34 @@ with a flag to specify whether to do a case or case insensitive search.
 */
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 /*
 #define INPUT "input.txt"
 #define OUTPUT "output.txt"
 */
 
 void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write);
-char* replaceLine( char *old_word, char *new_word, char *line);
-char* replaceLineCase( char *old_word, char *new_word, char *line);
+char* replaceLine( char *old_word, char *new_word, char *line, char *line_final);
+char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final);
 
 
-char* replaceLine( char *old_word, char *new_word, char *line)
+
+char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 {
 	
-	
-	char *occur, *line_final;
+	line_final = (char*)realloc( line_final, sizeof(line_final) + strlen(new_word) - strlen(old_word));
+	char *occur; 
 	int n, new, i;
 	
-	line_final = "";
+	
+	
 	occur = strstr( line, old_word);
 	
-	n = strlen(old_word) - strlen(occur);
+	n = strlen(line) - strlen(occur);
 	
 	strncat(line_final, line, n);
 	strcat( line_final, new_word);
-	
+
 	new = strlen(old_word);
 	
 	for(i = 0; i < new ; i++)
@@ -44,7 +46,7 @@ char* replaceLine( char *old_word, char *new_word, char *line)
 		occur = occur + 1;
 	}
 	if( strstr( occur, old_word) != NULL)
-		replaceLine( old_word, new_word, occur);
+		replaceLine( old_word, new_word, occur, line_final);
 	else
 	{
 		strcat(line_final, occur );
@@ -52,18 +54,17 @@ char* replaceLine( char *old_word, char *new_word, char *line)
 	}
 }
 
-
-char* replaceLineCase( char *old_word, char *new_word, char *line)
+char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final)
 {
 	
+	line_final = (char*)realloc( line_final, sizeof(line_final) + strlen(new_word) - strlen(old_word));
 	
-	char *occur, *line_final;
+	char *occur;
 	int n, new, i;
-	
-	line_final = "";
+
 	occur = strcasestr( line, old_word);
 	
-	n = strlen(old_word) - strlen(occur);
+	n = strlen(line) - strlen(occur);
 	
 	strncat(line_final, line, n);
 	strcat( line_final, new_word);
@@ -75,7 +76,7 @@ char* replaceLineCase( char *old_word, char *new_word, char *line)
 		occur = occur + 1;
 	}
 	if( strcasestr( occur, old_word) != NULL)
-		replaceLineCase( old_word, new_word, occur);
+		replaceLineCase( old_word, new_word, occur,line_final);
 	else
 	{
 		strcat(line_final, occur );
@@ -86,17 +87,20 @@ char* replaceLineCase( char *old_word, char *new_word, char *line)
 
 void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write)
 {
-	char* line = NULL;
+	char* line = NULL, *line_final;
 	size_t len = 0; 
 	ssize_t read1;
 	
 	while ((read1 = getline(&line, &len, read)) != -1)
-	{
+	{	
+		free(line_final);
+		line_final = (char*)malloc(strlen(line));
+		
 		if( flag == 1)
 		{
 			if( strstr( line, old_word) != NULL)
 			{
-				line = replaceLine( old_word, new_word, line);
+				replaceLine( old_word, new_word, line, line_final);
 			}
 			fprintf( write, "%s\n", line);
 		}
@@ -104,14 +108,13 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 		{
 			if( strcasestr( line, old_word) != NULL)
 			{
-				line = replaceLineCase( old_word, new_word, line);
+				replaceLineCase( old_word, new_word, line, line_final);
 			}
 			fprintf( write, "%s\n", line);
 		
 		}
 	}
 }
-
 int
 main(
 	int argc,
@@ -158,7 +161,14 @@ main(
 	fclose(read);
 	fflush(write);
 	fclose(write);
-
+/*	
+	char *str = "We are In nI JapaIn in iNkl.";
+	char *line_final;
+	line_final = (char*)malloc(1024);
+	printf("I am here \n");
+	str = replaceLineCase("in", "I", str, line_final);		
+	printf("%s \n", str);
+*/
 	return 0;
 }	
 
