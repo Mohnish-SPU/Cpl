@@ -9,8 +9,8 @@ with a flag to specify whether to do a case or case insensitive search.
 
 
 */
-#include <stdio>
-#include <string>
+#include <stdio.h>
+#include <string.h>
 
 #define INPUT "input.txt"
 #define OUTPUT "output.txt"
@@ -116,7 +116,7 @@ main(
 	char *argv[]
 	)
 {
-	FILE *read = fopen( INPUT,"r");
+	FILE *read = fopen( argv[2],"r");
 
 	if( read == NULL ) 
 	{
@@ -124,7 +124,7 @@ main(
 		exit(1);
 	}
 
-	FILE *write = fopen ( OUTPUT, "w");
+	FILE *write = fopen ( argv[5], "w");
 
 	if( write == NULL ) 
 	{
@@ -136,11 +136,11 @@ main(
 	{
 		if( strcmp(argv[1],"1"))
 		{
-			findReplace();
+			findReplace( 1, read, argv[3], argv[4], write);
 		}
 		else if( strcmp(argv[1],"0"))
 		{
-			findReplace();
+			findReplace( 0, read, argv[3], argv[4], write);
 		}
 		else
 		{
