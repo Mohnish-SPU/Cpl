@@ -129,7 +129,7 @@ main(
 		return 1;
 	}
 
-	FILE *write = fopen ( argv[5], "w");
+	FILE *write = fopen( argv[5], "w");
 
 	if( write == NULL ) 
 	{
@@ -161,14 +161,6 @@ main(
 	fclose(read);
 	fflush(write);
 	fclose(write);
-/*	
-	char *str = "We are In nI JapaIn in iNkl.";
-	char *line_final;
-	line_final = (char*)malloc(1024);
-	printf("I am here \n");
-	str = replaceLineCase("in", "I", str, line_final);		
-	printf("%s \n", str);
-*/
 	return 0;
 }	
 
