@@ -4,7 +4,7 @@ Author Mohnish
 version 1.0
 
 Program to read a file and replace a word with another specified in the command line 
-with a flag to specify whether to do a case or case insensitive search.
+with aflag to specify whether to do a case or case insensitive search.
 
 
 
