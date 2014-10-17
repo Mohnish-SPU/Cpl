@@ -94,9 +94,10 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 	
 	while ((read1 = getline(&line, &len, read)) != -1)
 	{	
-		//free(line_final);
+		printf("%s",line);
+		
 		line_final = (char*)malloc(strlen(line));
-		//printf("%s \n",line_final);
+		
 		if( flag == 1)
 		{
 			if( strstr( line, old_word) != NULL)
@@ -111,9 +112,12 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 		}
 		else
 		{
+			
 			if( strcasestr( line, old_word) != NULL)
 			{
+				printf("I've just been judged again\n");
 				line_final = replaceLineCase( old_word, new_word, line, line_final);
+				printf("%s\n", line_final);
 				fprintf( write, "%s", line_final);
 			}
 			else
@@ -175,6 +179,7 @@ main(
 		printf("Insufficient command line arguments \n");
 		return 3;
 	}
+	printf("In the end it doesn't even matter\n");
 	fclose(read);
 	fflush(write);
 	fclose(write);
