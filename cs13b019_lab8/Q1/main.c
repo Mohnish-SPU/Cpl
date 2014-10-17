@@ -1,7 +1,7 @@
 /*
 Author Mohnish
 
-version 1.2
+version 1.3
 
 Program to read a file and replace a word with another specified in the command line 
 with a flag to specify whether to do a case or case insensitive search.
@@ -87,32 +87,41 @@ char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_fi
 
 void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write)
 {
-	char* line = NULL, *line_final;
+	char* line = NULL;
+	char *line_final;
 	size_t len = 0; 
 	ssize_t read1;
 	
 	while ((read1 = getline(&line, &len, read)) != -1)
 	{	
-		free(line_final);
+		//free(line_final);
 		line_final = (char*)malloc(strlen(line));
-		
+		//printf("%s \n",line_final);
 		if( flag == 1)
 		{
 			if( strstr( line, old_word) != NULL)
 			{
-				replaceLine( old_word, new_word, line, line_final);
+				line_final = replaceLine( old_word, new_word, line, line_final);
+				fprintf( write, "%s", line_final);
 			}
-			fprintf( write, "%s\n", line);
+			else
+			{
+				fprintf( write, "%s", line);
+			}
 		}
 		else
 		{
 			if( strcasestr( line, old_word) != NULL)
 			{
-				replaceLineCase( old_word, new_word, line, line_final);
+				line_final = replaceLineCase( old_word, new_word, line, line_final);
+				fprintf( write, "%s", line_final);
 			}
-			fprintf( write, "%s\n", line);
-		
+			else
+			{
+				fprintf( write, "%s", line);
+			}
 		}
+		
 	}
 }
 int
@@ -121,6 +130,12 @@ main(
 	char *argv[]
 	)
 {
+	
+	int i;
+	for(i = 0;i < argc; i++)
+	{
+		printf("%s \n",argv[i]);
+	}
 	FILE *read = fopen( argv[2],"r");
 
 	if( read == NULL ) 
@@ -139,12 +154,14 @@ main(
 	
 	if( argc == 6)
 	{
-		if( strcmp(argv[1],"1"))
+		if( strcmp(argv[1],"1") == 0)
 		{
+			
 			findReplace( 1, read, argv[3], argv[4], write);
 		}
-		else if( strcmp(argv[1],"0"))
+		else if( strcmp(argv[1],"0") == 0)
 		{
+			
 			findReplace( 0, read, argv[3], argv[4], write);
 		}
 		else
