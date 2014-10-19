@@ -12,10 +12,6 @@ with a flag to specify whether to do a case or case insensitive search.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-/*
-#define INPUT "input.txt"
-#define OUTPUT "output.txt"
-*/
 
 void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write);
 char* replaceLine( char *old_word, char *new_word, char *line, char *line_final);
@@ -170,7 +166,7 @@ main(
 		printf("Insufficient command line arguments \n");
 		return 3;
 	}
-	printf("In the end it doesn't even matter\n");
+
 	fclose(read);
 	fflush(write);
 	fclose(write);
