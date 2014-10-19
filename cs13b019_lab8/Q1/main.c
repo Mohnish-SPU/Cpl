@@ -26,7 +26,7 @@ char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_fi
 char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 {
 	
-	line_final = (char*)realloc( line_final, sizeof(line_final) + strlen(new_word) - strlen(old_word));
+	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word));
 	char *occur; 
 	int n, new, i;
 	
@@ -57,7 +57,7 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final)
 {
 	
-	line_final = (char*)realloc( line_final, sizeof(line_final) + strlen(new_word) - strlen(old_word));
+	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word));
 	
 	char *occur;
 	int n, new, i;
@@ -94,15 +94,13 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 	
 	while ((read1 = getline(&line, &len, read)) != -1)
 	{	
-		printf("%s",line);
 		
 		line_final = (char*)malloc(strlen(line));
-		
 		if( flag == 1)
 		{
 			if( strstr( line, old_word) != NULL)
 			{
-				line_final = replaceLine( old_word, new_word, line, line_final);
+				replaceLine( old_word, new_word, line, line_final);
 				fprintf( write, "%s", line_final);
 			}
 			else
@@ -115,9 +113,7 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 			
 			if( strcasestr( line, old_word) != NULL)
 			{
-				printf("I've just been judged again\n");
-				line_final = replaceLineCase( old_word, new_word, line, line_final);
-				printf("%s\n", line_final);
+				replaceLineCase( old_word, new_word, line, line_final);
 				fprintf( write, "%s", line_final);
 			}
 			else
@@ -135,11 +131,6 @@ main(
 	)
 {
 	
-	int i;
-	for(i = 0;i < argc; i++)
-	{
-		printf("%s \n",argv[i]);
-	}
 	FILE *read = fopen( argv[2],"r");
 
 	if( read == NULL ) 
