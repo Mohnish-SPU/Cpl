@@ -1,7 +1,12 @@
 /*
 Author Mohnish
+	cs13b019
+	
+	lab8
 
+Question 1
 version 1.5
+
 
 Program to read a file and replace a word with another specified in the command line 
 with a flag to specify whether to do a case or case insensitive search.
@@ -9,21 +14,25 @@ with a flag to specify whether to do a case or case insensitive search.
 
 
 */
+
+//Command line arguments of type ./main <flag> <input.txt> <old_word> <new_word> <output.txt>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write);
-char* replaceLine( char *old_word, char *new_word, char *line, char *line_final);
-char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final);
-int nof(char* old_word,char* line);
+void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write); //Function find and replace from a file and write output onto a file
+char* replaceLine( char *old_word, char *new_word, char *line, char *line_final);//Recursively produces replaced line 
+char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final);//Same as above but case insenstive
+int nof(char* old_word,char* line);//Counts no of occurances of word in a string recursively
 
+//Counts no of occurances of word in a string recursively
 int nof(char* old_word,char* line)
 {
 	int new,i;
 	
-	char* occur = strcasestr(line,old_word);
-	if(strcasestr(line,old_word) != NULL)
+	char* occur = strcasestr(line,old_word);  //strstr returns char pointer to substring
+	if(strcasestr(line,old_word) != NULL)	
 	{	
 		new = strlen(old_word);
 	
@@ -41,7 +50,7 @@ int nof(char* old_word,char* line)
 char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 {
 
-	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word) + 1);
+	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word) + 1);//to incorporate size of new_word
 	char *occur; 
 	int n, new, i;
 	
@@ -50,7 +59,7 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 	occur = strstr( line, old_word);
 	
 	n = strlen(line) - strlen(occur);
-	strncat(line_final, line, n);
+	strncat(line_final, line, n);//Adding remainder of chars before the occur 
 	strcat( line_final, new_word);
 
 	new = strlen(old_word);
@@ -60,7 +69,7 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 		occur = occur + 1;
 	}
 	if( strstr(occur,old_word) != NULL)
-		replaceLine(old_word,new_word,occur, line_final);
+		replaceLine(old_word,new_word,occur, line_final);//Recursive function call
 	else
 	{
 		strcat(line_final, occur );
@@ -68,6 +77,7 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 	}
 }
 
+//Same as above but uses strcasestr which is case insensitive
 char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final)
 {
 	
@@ -90,7 +100,7 @@ char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_fi
 		occur = occur + 1;
 	}
 	if( strcasestr( occur, old_word) != NULL)
-		replaceLineCase( old_word, new_word, occur,line_final);
+		replaceLineCase( old_word, new_word, occur,line_final);//Recursive function call
 	else
 	{
 		strcat(line_final, occur );
@@ -112,19 +122,19 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 		line_final = (char*)malloc(strlen(line) + 1000000);
 		if( flag == 1)
 		{
-			if( strstr( line, old_word) != NULL)
+			if( strstr( line, old_word) != NULL)  // A string is passed to the replaceLine function iff it has a substring of old_word
 			{
 				replaceLine( old_word, new_word, line, line_final);
 				fprintf( write, "%s", line_final);
 			}
 			else
 			{
-				fprintf( write, "%s", line);
+				fprintf( write, "%s", line);//Else printed into the file
 			}
 		}
 		else
 		{
-			
+			//Same as above but case insensitive
 			if( strcasestr( line, old_word) != NULL)
 			{
 				replaceLineCase( old_word, new_word, line, line_final);
@@ -144,7 +154,7 @@ main(
 	char *argv[]
 	)
 {
-	
+	//A chech to whether basic parameters are met in the main function
 	FILE *read = fopen( argv[2],"r");
 
 	if( read == NULL ) 

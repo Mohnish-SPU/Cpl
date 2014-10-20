@@ -11,7 +11,7 @@ Final output should be in output1.txt
 -------------------------------------------------------------------------------------------
 For input2.txt do following operations in sequence by generating intermediate files.
 
-1.flag=1, old word= "i" , new word= "Akshay"
+1.flag=0, old word= "i" , new word= "Akshay"
 2.flag=1, old word= "I" , new word= "Preetham"
 3.flag=0, old word= "ha", new word= "o"
 4.flag=1, old word= "Aksoy", new word= "Preetom" 
