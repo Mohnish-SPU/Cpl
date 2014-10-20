@@ -58,55 +58,79 @@ char *clearFile(FILE *read, FILE *write)
 
 void indentLine(char* line, FILE *write)
 {
-	int i, j;
+	int i, j, flag = 0;
 	i = 0;
 	int tabCount = 0;
 	while(line[i] != '\0')
 	{
-		if(line[i] == '{')
-		{	
-			fprintf(write,"\n");
-			for(j = 0;j < tabCount;j++)
-			{
-				fprintf(write,"\t");	
-			}
-			fprintf(write,"{\n");
-			tabCount += 1;
-			for(j = 0;j < tabCount;j++)
-			{
-				fprintf(write,"\t");	
-			}
-		}
-		else if(line[i] == '}')
+		if(line[i] == '(')
+			flag = 1;
+		if(line[i] == '"')
+			flag = 1;
+		
+		if(flag == 0)
 		{
-			fprintf(write,"\n");
-			tabCount -= 1;
-			for(j = 0;j < tabCount;j++)
-			{
-				fprintf(write,"\t");	
+			if(line[i] == '{')
+			{	
+				fprintf(write,"\n");
+				for(j = 0;j < tabCount;j++)
+				{
+					fprintf(write,"\t");	
+				}
+				fprintf(write,"{\n");
+				tabCount += 1;
+				for(j = 0;j < tabCount;j++)
+				{
+					fprintf(write,"\t");	
+				}
 			}
-			
-			fprintf(write,"}\n");
-			for(j = 0;j < tabCount;j++)
+			else if(line[i] == '}')
 			{
-				fprintf(write,"\t");	
+				fprintf(write,"\n");
+				tabCount -= 1;
+				for(j = 0;j < tabCount;j++)
+				{
+					fprintf(write,"\t");	
+				}
+				
+				fprintf(write,"}");
+				if(line[i+1] != '}')
+					fprintf(write,"\n");
+				for(j = 0;j < tabCount;j++)
+				{
+					fprintf(write,"\t");	
+				}
+				
 			}
-			
+			else if(line[i] == ';')
+			{
+				if(line[i+1] != '}')
+					fprintf(write,";\n");
+				for(j = 0;j < tabCount;j++)
+				{
+					fprintf(write,"\t");	
+				}
+				
+			}else
+			{
+				fprintf(write,"%c",line[i]);
+			}
+			i++;
 		}
-		else if(line[i] == ';')
-		{
-			if(line[i+1] != '}')
-				fprintf(write,";\n");
-			for(j = 0;j < tabCount;j++)
+		else
 			{
-				fprintf(write,"\t");	
+				fprintf(write,"%c",line[i]);
+				i++;
 			}
-			
-		}else
+		if(flag == 1 && line[i] == ')')
 		{
-			fprintf(write,"%c",line[i]);
+			flag = 0;
 		}
-		i++;
+		if(flag == 1 && line[i] == '"')
+		{
+			flag = 0;
+		}
+	
 	}
 }
 
