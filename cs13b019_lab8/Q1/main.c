@@ -1,7 +1,7 @@
 /*
 Author Mohnish
 
-version 1.3
+version 1.5
 
 Program to read a file and replace a word with another specified in the command line 
 with a flag to specify whether to do a case or case insensitive search.
@@ -16,13 +16,32 @@ with a flag to specify whether to do a case or case insensitive search.
 void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *write);
 char* replaceLine( char *old_word, char *new_word, char *line, char *line_final);
 char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final);
+int nof(char* old_word,char* line);
 
+int nof(char* old_word,char* line)
+{
+	int new,i;
+	
+	char* occur = strcasestr(line,old_word);
+	if(strcasestr(line,old_word) != NULL)
+	{	
+		new = strlen(old_word);
+	
+		for(i = 0; i < new ; i++)
+		{
+			occur = occur + 1;
+		}
+		return (1 + nof(old_word,occur));
+	}
+	else 
+		return 0;
+}
 
 
 char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 {
-	
-	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word));
+
+	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word) + 1);
 	char *occur; 
 	int n, new, i;
 	
@@ -31,7 +50,6 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 	occur = strstr( line, old_word);
 	
 	n = strlen(line) - strlen(occur);
-	
 	strncat(line_final, line, n);
 	strcat( line_final, new_word);
 
@@ -41,8 +59,8 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 	{
 		occur = occur + 1;
 	}
-	if( strstr( occur, old_word) != NULL)
-		replaceLine( old_word, new_word, occur, line_final);
+	if( strstr(occur,old_word) != NULL)
+		replaceLine(old_word,new_word,occur, line_final);
 	else
 	{
 		strcat(line_final, occur );
@@ -53,7 +71,7 @@ char* replaceLine( char *old_word, char *new_word, char *line, char *line_final)
 char* replaceLineCase( char *old_word, char *new_word, char *line, char* line_final)
 {
 	
-	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word));
+	line_final = (char*)realloc( line_final, strlen(line) + strlen(new_word) - strlen(old_word) + 1);
 	
 	char *occur;
 	int n, new, i;
@@ -87,11 +105,11 @@ void findReplace( int flag, FILE *read, char *old_word, char *new_word, FILE *wr
 	char *line_final;
 	size_t len = 0; 
 	ssize_t read1;
-	
+	int nofwrd;
 	while ((read1 = getline(&line, &len, read)) != -1)
 	{	
-		
-		line_final = (char*)malloc(strlen(line));
+		nofwrd = nof(old_word,line);
+		line_final = (char*)malloc(strlen(line) + 1000000);
 		if( flag == 1)
 		{
 			if( strstr( line, old_word) != NULL)
