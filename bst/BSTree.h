@@ -22,9 +22,9 @@ typedef struct BSTree_ {
 int printTree(node* root);
 bst* treeInit();
 node* nodeInit(int value);
-bst* insertNode(bst* treeOrg, int value);
-bst* removeNode(bst* treeOrg, int value);
-node* findNode(bst* treeOrg, int value,node* prev, int *pos);
+bst* insertNode(bst** treeOrg, int value);
+bst* removeNode(bst** treeOrg, int value);
+node* findNode(bst** treeOrg, int value,node** prev, int *pos);
 int findRight(node* root);
 
 //Functions defined for the traversal portion

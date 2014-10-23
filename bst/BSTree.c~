@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int printTreePre(node* root)
+int printTreePre(bst* tree)
 {
 	
 	if(root == NULL)
@@ -17,15 +17,15 @@ int printTreePre(node* root)
 		return 1;
 	}
 	
-	printf("%d ",root->data);
+	printf("%d ",tree->root->data);
 	
 	if(root->left == NULL && root->right == NULL)
 	{
 		return 0;
 	}
 
-	printTreePre(root->left);
-	printTreePre(root->right);
+	printTreePre(tree->root->left);
+	printTreePre(tree->root->right);
 	
 	return 0;
 }
@@ -115,13 +115,16 @@ int printTree(node* root)
 	return 0;
 }
 
-bst* removeNode(bst* treeOrg, int value)
+bst* removeNode(bst** treeOrg, int value)
 {
-	bst* tree = treeInit();
+	bst* tree = *treeOrg;//treeInit();
 	int pre;
 	int* pos = (int*)malloc(sizeof(int));
 	node** prev = (node**)malloc(sizeof(node*));
-	node* root = findNode(tree, value, prev, pos);
+	findNode(tree, value, prev, pos);
+	node* root;
+	if(*pos == 1) root = *prev->right;// = root->right;
+		else root = *prev->left;
 	if(root == NULL)
 	{
 		printf("Value not in tree \n");
@@ -130,9 +133,10 @@ bst* removeNode(bst* treeOrg, int value)
 	
 	if(root->left = NULL)
 	{
+		
+		if(*pos == 1) *prev->right = root->right;
+		else *prev->left = root->right;
 		free(root);
-		if(*pos == 1) *prev->right == root->right;
-		else *prev->left == root->right;
 		
 		return tree;
 	}
@@ -141,12 +145,12 @@ bst* removeNode(bst* treeOrg, int value)
 	
 	root->data = pre;
 	tree->root  = root->left;
-	removeNode(tree, pre);
+	removeNode(&tree, pre);
 	
 }
-node* findNode(bst* treeOrg, int value, node** prev,int *pos)
+node* findNode(bst** treeOrg, int value, node** prev,int *pos)
 {
-	bst* tree = treeOrg;
+	bst* tree = *treeOrg;
 	
 	if(tree->root == NULL )
 		return NULL:
@@ -171,7 +175,7 @@ node* findNode(bst* treeOrg, int value, node** prev,int *pos)
 		}
 		tree->root = tree->root->left;		
 	}
-	findNode( tree, value, prev);
+	findNode( &tree, value, prev);
 	
 }
 
@@ -199,9 +203,9 @@ node* nodeInit(int value)
 //Insertion of a node
 //Assumes such a value does not pre-exist in the tree
 
-bst* insertNode(bst* treeOrg, int value)
+bst* insertNode(bst** treeOrg, int value)
 {
-	bst* tree = treeOrg;
+	bst* tree = *treeOrg;
 	if(tree->root == NULL)
 	{
 		tree->root = nodeInit(value);
@@ -225,5 +229,5 @@ bst* insertNode(bst* treeOrg, int value)
 		}
 		tree->root = tree->root->left;		
 	}
-	insertNode( tree, value);
+	insertNode( &tree, value);
 }
