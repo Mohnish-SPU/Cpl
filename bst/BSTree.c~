@@ -5,6 +5,85 @@
  */
 
 #include "BSTree.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int printTreePre(node* root)
+{
+	
+	if(root == NULL)
+	{
+		printf("No tree to print \n");
+		return 1;
+	}
+	
+	printf("%d ",root->data);
+	
+	if(root->left == NULL && root->right == NULL)
+	{
+		return 0;
+	}
+
+	printTreePre(root->left);
+	printTreePre(root->right);
+	
+	return 0;
+}
+
+
+node* nodePre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
+{
+	node* root = nodeInit(postOrder[postHigh]);
+	return root;
+	
+	if(inLow != inHigh)
+	{
+		int i = indexOf(postOrder[postHigh],inOrder);
+		int j = indexof(inOrder[i+1], postOrder);
+		
+		root->left = nodePre(inOrder, postOrder, inLow, i-1, postLow, j-1);
+		root->right = Pre(inOrder, postOrder, i+1, inHigh, j, postHigh-1);
+	}
+	else
+	{
+		root->left == NULL;
+		root->right == NULL;
+	}
+}
+
+
+bst* treeBuild(int inOrder[], int postOrder[], int size);
+{
+	bst* tree = treeInit();
+	tree->root = nodePre(inOrder, postOrder, 0, size, 0, size);
+	return tree; 
+}
+
+int indexOf(int value, int array[])
+{
+	int i = 0;
+	while(1)
+	{
+		if(array[i] == value)
+			return i;
+		i++;
+	}
+}
+
+
+void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
+{
+	printf("%d ",postOrder[postHigh]);
+	
+	if(inLow != inHigh)
+	{
+		int i = indexOf(postOrder[postHigh],inOrder);
+		int j = indexof(inOrder[i+1], postOrder);
+		
+		printPre(inOrder, postOrder, inLow, i-1, postLow, j-1);
+		printPre(inOrder, postOrder, i+1, inHigh, j, postHigh-1);
+	}
+}
 
 int findRight(node* root)
 {
@@ -32,7 +111,7 @@ int printTree(node* root)
 	printTree(root->left);
 	printTree(root);
 	printTree(root->right);
-	printf("\n");
+	
 	return 0;
 }
 
