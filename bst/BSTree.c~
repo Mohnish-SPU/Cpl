@@ -121,7 +121,7 @@ bst* removeNode(bst** treeOrg, int value)
 	int pre;
 	int* pos = (int*)malloc(sizeof(int));
 	node** prev = (node**)malloc(sizeof(node*));
-	findNode(tree, value, prev, pos);
+	findNode(&tree, value, prev, pos);
 	node* root;
 	if(*pos == 1) root = *prev->right;// = root->right;
 		else root = *prev->left;
@@ -199,6 +199,7 @@ node* nodeInit(int value)
 	new->data = value;
 	return new;
 }
+
 
 //Insertion of a node
 //Assumes such a value does not pre-exist in the tree

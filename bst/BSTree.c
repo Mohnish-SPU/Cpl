@@ -200,6 +200,7 @@ node* nodeInit(int value)
 	return new;
 }
 
+
 //Insertion of a node
 //Assumes such a value does not pre-exist in the tree
 
