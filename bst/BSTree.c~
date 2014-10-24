@@ -8,60 +8,86 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int printTreePre(bst* tree)
+int printTreePre(node* root)
 {
 	
 	if(root == NULL)
 	{
-		printf("No tree to print \n");
+		//printf("No tree to print \n");
 		return 1;
 	}
 	
-	printf("%d ",tree->root->data);
+	printf("%d ",root->data);
 	
 	if(root->left == NULL && root->right == NULL)
 	{
 		return 0;
 	}
 
-	printTreePre(tree->root->left);
-	printTreePre(tree->root->right);
+	printTreePre(root->left);
+	printTreePre(root->right);
 	
 	return 0;
 }
 
-
+void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
+{
+	printf("%d ",postOrder[postHigh]);
+	int i, j;
+	if(inLow != inHigh )
+	{
+		i = indexOf(postOrder[postHigh],inOrder);
+		j = indexOfLess(inOrder[i+1], postOrder, postHigh);
+		
+		if((i -1) >= inLow)
+			printPre(inOrder, postOrder, inLow, i-1, postLow, j-1);
+		if(inHigh >= i+1)
+			printPre(inOrder, postOrder, i+1, inHigh, j, postHigh-1);
+	}
+}
 node* nodePre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
 {
 	node* root = nodeInit(postOrder[postHigh]);
-	return root;
-	
+	int i, j;
+	//printf("%d",postOrder[postHigh]);
+	scanf("%d",&i);
 	if(inLow != inHigh)
 	{
-		int i = indexOf(postOrder[postHigh],inOrder);
-		int j = indexof(inOrder[i+1], postOrder);
+		//printf("%d %d \n",i,j);
+		i = indexOf(postOrder[postHigh],inOrder);
+		j = indexOfLess(inOrder[i+1], postOrder, postHigh);
 		
-		root->left = nodePre(inOrder, postOrder, inLow, i-1, postLow, j-1);
-		root->right = Pre(inOrder, postOrder, i+1, inHigh, j, postHigh-1);
+		printf("%d %d \n",i,j);
+		
+		if((i -1) >= inLow)
+			root->left = (node*)nodePre(inOrder, postOrder, inLow, i-1, postLow, j-1);
+		else
+			root->left = NULL;
+		if(inHigh >= i+1)
+			root->right = (node*)nodePre(inOrder, postOrder, i+1, inHigh, j, postHigh-1);
+		else
+			root->right = NULL;
 	}
 	else
 	{
-		root->left == NULL;
-		root->right == NULL;
+		root->left = NULL;
+		root->right = NULL;
 	}
+	return root;
 }
 
 
-bst* treeBuild(int inOrder[], int postOrder[], int size);
+bst* treeBuild(int inOrder[], int postOrder[], int size)
 {
 	bst* tree = treeInit();
-	tree->root = nodePre(inOrder, postOrder, 0, size, 0, size);
+	tree->root = nodePre(inOrder, postOrder, 0, size-1, 0, size-1);
 	return tree; 
 }
 
 int indexOf(int value, int array[])
 {
 	int i = 0;
+	
 	while(1)
 	{
 		if(array[i] == value)
@@ -70,20 +96,20 @@ int indexOf(int value, int array[])
 	}
 }
 
-
-void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
+int indexOfLess(int value, int array[], int high)
 {
-	printf("%d ",postOrder[postHigh]);
-	
-	if(inLow != inHigh)
+	int i = 0;
+	while(i < high)
 	{
-		int i = indexOf(postOrder[postHigh],inOrder);
-		int j = indexof(inOrder[i+1], postOrder);
-		
-		printPre(inOrder, postOrder, inLow, i-1, postLow, j-1);
-		printPre(inOrder, postOrder, i+1, inHigh, j, postHigh-1);
+		if(array[i] >= value)
+			return i;
+		i++;
 	}
+	return i;
 }
+
+
+
 
 int findRight(node* root)
 {
@@ -123,19 +149,19 @@ bst* removeNode(bst** treeOrg, int value)
 	node** prev = (node**)malloc(sizeof(node*));
 	findNode(&tree, value, prev, pos);
 	node* root;
-	if(*pos == 1) root = *prev->right;// = root->right;
-		else root = *prev->left;
+	if(*pos == 1) root = (*prev)->right;// = root->right;
+		else root = (*prev)->left;
 	if(root == NULL)
 	{
 		printf("Value not in tree \n");
-		return treeOrg;
+		return *treeOrg;
 	}
 	
 	if(root->left = NULL)
 	{
 		
-		if(*pos == 1) *prev->right = root->right;
-		else *prev->left = root->right;
+		if(*pos == 1) (*prev)->right = root->right;
+		else (*prev)->left = root->right;
 		free(root);
 		
 		return tree;
@@ -153,7 +179,7 @@ node* findNode(bst** treeOrg, int value, node** prev,int *pos)
 	bst* tree = *treeOrg;
 	
 	if(tree->root == NULL )
-		return NULL:
+		return NULL;
 	
 	if(tree->root->data < value)
 	{
@@ -175,7 +201,7 @@ node* findNode(bst** treeOrg, int value, node** prev,int *pos)
 		}
 		tree->root = tree->root->left;		
 	}
-	findNode( &tree, value, prev);
+	findNode( &tree, value, prev, pos);
 	
 }
 
@@ -200,7 +226,6 @@ node* nodeInit(int value)
 	return new;
 }
 
-
 //Insertion of a node
 //Assumes such a value does not pre-exist in the tree
 
@@ -211,7 +236,8 @@ bst* insertNode(bst** treeOrg, int value)
 	{
 		tree->root = nodeInit(value);
 		return tree;
-	}	
+	}
+		
 	if(tree->root->data < value)
 	{
 		if(tree->root->right == NULL)
@@ -221,7 +247,8 @@ bst* insertNode(bst** treeOrg, int value)
 		}
 		tree->root = tree->root->right;
 	}
-	else(tree->root->data > value)
+	
+	else if(tree->root->data > value)
 	{
 		if(tree->root->left == NULL)
 		{

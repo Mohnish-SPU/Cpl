@@ -9,7 +9,6 @@ LDFLAGS = -lm
 all: treeTrav
 
 treeTrav: treeTrav.o BSTree.o
-	$(CC) treeTrav.o BSTree.o -o $@
 
 treeTrav.o: treeTrav.c BSTree.h
 	$(CC) $(CFLAGS) treeTrav.c -o $@

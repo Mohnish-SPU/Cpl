@@ -26,6 +26,7 @@ bst* insertNode(bst** treeOrg, int value);
 bst* removeNode(bst** treeOrg, int value);
 node* findNode(bst** treeOrg, int value,node** prev, int *pos);
 int findRight(node* root);
+int indexOfLess(int value, int array[], int high);
 
 //Functions defined for the traversal portion
 void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh);
