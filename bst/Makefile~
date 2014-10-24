@@ -6,9 +6,16 @@ SH = bash
 CFLAGS = -c -g
 LDFLAGS = -lm
 
-all: treeTrav
+all: treeTrav token
+
+token: token.o BSTree.o
+	$(CC) token.o BSTree.o -o $@
+	
+token.o: token.c BSTree.h
+	$(CC) $(CFLAGS) token.c -o $@
 
 treeTrav: treeTrav.o BSTree.o
+	$(CC) treeTrav.o BSTree.o -o $@
 
 treeTrav.o: treeTrav.c BSTree.h
 	$(CC) $(CFLAGS) treeTrav.c -o $@
