@@ -6,9 +6,8 @@ void evaluate(int board[][], int rowNo, int size,int* count);
 
 bool setInvalid(int flag, int rowNo, int colNo, int board[][], int size);
 /*
- *For the setInvalid() function
  *flag == 1 to set values
- *flag == -1 to remove inv insertions made by the previous function call
+ *flag == -1 to remove inv insertions
  *
  */
 
