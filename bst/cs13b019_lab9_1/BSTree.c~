@@ -10,17 +10,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Prints a tree in pre order
 
 int printTreePre(node* root)
 {
 	
 	if(root == NULL)
 	{
-		//printf("No tree to print \n");
 		return 1;
 	}
 	
-	printf("%d ",root->data);
+	printf("%d ",root->data);//Root left right
 	
 	if(root->left == NULL && root->right == NULL)
 	{
@@ -33,6 +33,8 @@ int printTreePre(node* root)
 	return 0;
 }
 
+
+//Prints pre order w/o making a tree
 void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
 {
 
@@ -53,6 +55,7 @@ void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow
 	
 }
 
+//Assigns nodes to tree to give proper root from in and post order traversals
 
 node* nodePre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh)
 {
@@ -81,7 +84,7 @@ node* nodePre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow
 	return root;
 }
 
-
+//Builds a tree from in and pre order traversals
 bst* treeBuild(int inOrder[], int postOrder[], int size)
 {
 	bst* tree = treeInit();
@@ -89,6 +92,7 @@ bst* treeBuild(int inOrder[], int postOrder[], int size)
 	return tree; 
 }
 
+//Returns index in an array
 int indexOf(int value, int array[])
 {
 	int i = 0;
@@ -100,7 +104,7 @@ int indexOf(int value, int array[])
 		i++;
 	}
 }
-
+//Return less than index of a value in an array
 int indexOfLess(int value, int array[], int high)
 {
 	int i = 0;
@@ -115,7 +119,7 @@ int indexOfLess(int value, int array[], int high)
 
 
 
-
+// finds right most node in a tree
 int findRight(node* root)
 {
 	if(root->right  == NULL)
@@ -126,6 +130,7 @@ int findRight(node* root)
 	findRight(root->right);
 }
 
+//Prints an array in sorted manner
 int printTree(bst* tree)
 {
 	
@@ -146,7 +151,7 @@ int printTree(bst* tree)
 	
 	return 0;
 }
-
+//Discarded function
 bst* removeNode(bst* treeOrg, int value)
 {
 	bst* tree = treeOrg;//treeInit();
@@ -180,7 +185,7 @@ bst* removeNode(bst* treeOrg, int value)
 	removeNode(tree, pre);
 	
 }
-
+//Returns address of a node in a tree
 node* findNode(bst* tree, int value)//, node** prev,int *pos)
 {
 
@@ -242,7 +247,7 @@ node* nodeInit(int value)
 //Insertion of a node
 //Assumes such a value does not pre-exist in the tree
 
-void insertNode(bst* tree, int value)//,node** prev,int* pos)// Must add previous node
+void insertNode(bst* tree, int value)
 {
 	node *temp, *par;
 
@@ -332,7 +337,7 @@ void case_c(node *par, node *loc, bst *tree)
 	suc->left=loc->left;
 	suc->right=loc->right;
 }
-
+//Removes a node assuming three possible cases 
 void deletion(bst *tree, int x)
 {
 	node *p,*f=NULL;
@@ -370,6 +375,8 @@ void deletion(bst *tree, int x)
 	free(p);
 }
 
+
+//Breadth first print of a BStree
 void bfs(bst *tree)
 {
 	int *error = (int*)malloc(sizeof(int));

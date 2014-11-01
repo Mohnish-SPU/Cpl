@@ -1,42 +1,33 @@
 # Makefile
 #
 
-CC = gcc
+CC=gcc
 SH = bash
-CFLAGS = -c -g
+CFLAGS = -g
 LDFLAGS = -lm
 
-all: treeTrav token
+all: btTraversal
 
-token: token.o BSTree.o
-	$(CC) token.o BSTree.o -o $@
+btTraversal: btTraversal.o BSTree.o Queue.o LList.o
+	$(CC) $(LDFLAGS) $^ -o $@
 
-treeTrav: treeTrav.o BSTree.o
-	$(CC) treeTrav.o BSTree.o -o $@
-	
-token.o: token.c BSTree.h
-	$(CC) $(CFLAGS) token.c -o $@
+btTraversal.o: btTraversal.c BSTree.h
+	$(CC) -c $(CFLAGS) $< -o $@
 
-treeTrav.o: treeTrav.c BSTree.h
-	$(CC) $(CFLAGS) treeTrav.c -o $@
+BSTree.o: BSTree.c BSTree.h Queue.h
+	$(CC) -c $(CFLAGS) $< -o $@
 
-BSTree.o: BSTree.c BSTree.h
-	$(CC) $(CFLAGS) BSTree.c -o $@
+Queue.o: Queue.c Queue.h LList.h
+	$(CC) -c $(CFLAGS) $< -o $@
 
-# Write Makefile rules to compile the main program, token, as well as
-# the BSTree library
+LList.o: LList.c LList.h
+	$(CC) -c $(CFLAGS) $< -o $@
 
-.PHONY: clean lint test
+
+
+.PHONY: clean 
 
 clean:
-	rm -rf treeTrav
 	rm -rf *.o
-	rm -rf token
-	rm -rf tests/*_
-
-lint:
-	for f in *.c; do echo $$f; splint -standard $$f; done;
-
-test: all
-	$(SH) tests/run_tests.sh
-
+	rm -rf btTraversal
+	

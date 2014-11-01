@@ -6,10 +6,17 @@ SH = bash
 CFLAGS = -g
 LDFLAGS = -lm
 
-all: btTraversal
+all: btTraversal btTraversal1
 
 btTraversal: btTraversal.o BSTree.o Queue.o LList.o
 	$(CC) $(LDFLAGS) $^ -o $@
+
+btTraversal1: btTraversal1.o BSTree.o Queue.o LList.o
+	$(CC) $(LDFLAGS) $^ -o $@
+
+
+btTraversal1.o: btTraversal1.c BSTree.h
+	$(CC) -c $(CFLAGS) $< -o $@
 
 btTraversal.o: btTraversal.c BSTree.h
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -25,15 +32,9 @@ LList.o: LList.c LList.h
 
 
 
-.PHONY: clean lint test
+.PHONY: clean 
 
 clean:
 	rm -rf *.o
-	rm -rf token
-	rm -rf tests/*_
-
-lint:
-	for f in *.c; do echo $$f; splint -standard $$f; done;
-
-test: all
-	$(SH) tests/run_tests.sh
+	rm -rf btTraversal
+	

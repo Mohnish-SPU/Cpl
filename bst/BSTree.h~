@@ -19,20 +19,39 @@ typedef struct BSTree_ {
     node* root;
 } bst;
 
-int printTree(node* root);
+int printTree(bst* tree);
+
 bst* treeInit();
+
 node* nodeInit(int value);
-bst* insertNode(bst** treeOrg, int value);
-bst* removeNode(bst** treeOrg, int value);
-node* findNode(bst** treeOrg, int value,node** prev, int *pos);
+
+void insertNode(bst* treeOrg, int value);//,node** prev,int* pos);
+
+node* findNode(bst* treeOrg, int value);//,node** prev, int *pos);
+
 int findRight(node* root);
-int indexOfLess(int value, int array[]);
+
+int indexOfLess(int value, int array[], int high);
+
+void deletion(bst *tree, int x);
+
+void case_a(node* par, node* loc, bst* tree);
+
+void case_b(node* par, node* loc, bst* tree);
+
+void case_c(node* par, node* loc, bst* tree);
+
+void bfs(bst *tree);
 
 //Functions defined for the traversal portion
 void printPre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh);
+
 int indexOf(int value, int array[]);
+
 bst* treeBuild(int inOrder[], int postOrder[], int size);
+
 node* nodePre(int inOrder[], int postOrder[], int inLow, int inHigh, int postLow, int postHigh);
+
 int printTreePre(node* root);
 
 

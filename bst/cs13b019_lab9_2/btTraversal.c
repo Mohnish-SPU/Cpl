@@ -25,12 +25,14 @@ main()
 		scanf("%d",&postOrder[i]);
 	}
 
-	printPre( inOrder, postOrder,0, size-1, 0, size-1);
+	printPre( inOrder, postOrder,0, size-1, 0, size-1); // W/o making a tree
 	printf("\n");
 
-	bst* tree = treeBuild(inOrder, postOrder, size);
-	printTree(tree);
-	printTreePre(tree->root);
+	bst* tree = treeBuild(inOrder, postOrder, size);//Constructs a ree
+	//printTree(tree);
+	printTreePre(tree->root);//Prints the tree in the preorder notation
 	printf("\n");
+	//For 2 a,b answer is yes we can directly get the inorder by sorting
+	//And get a unique tree
 }
 

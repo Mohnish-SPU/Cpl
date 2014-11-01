@@ -6,12 +6,12 @@ SH = bash
 CFLAGS = -g
 LDFLAGS = -lm
 
-all: btTraversal
+all: token
 
-btTraversal: btTraversal.o BSTree.o Queue.o LList.o
+token: token.o BSTree.o Queue.o LList.o
 	$(CC) $(LDFLAGS) $^ -o $@
 
-btTraversal.o: btTraversal.c BSTree.h
+token.o: token.c BSTree.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 BSTree.o: BSTree.c BSTree.h Queue.h

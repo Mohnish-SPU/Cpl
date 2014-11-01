@@ -9,15 +9,9 @@
 
 int main( int argc, char* argv[] )
 {
-  // TODO: Read a stream of integers using scanf. Stop when you see a
-  //      -1
 	int token;
-	node** prev = (node**)malloc(sizeof(node*));
-	node** prev1 = (node**)malloc(sizeof(node*));
 	
 	bst* tree = treeInit();
-	int* pos = (int*)malloc(sizeof(int));
-	bst* rootOrg = treeInit();
 	
 	//printf("Enter Token:\n");
 	scanf("%d", &token);
@@ -30,13 +24,11 @@ int main( int argc, char* argv[] )
 		printf("\n");
 	
 		
-	//scanf("%d", &token);
+	//scanf("%d", &token);//Parsing for EOF to run test cases
 	while(scanf("%d", &token) != -1)//(token != -1)
 	{
 		
-		*pos = 0;
-		*prev1 = NULL;
-
+		
 		if((node*)findNode(tree, token) == NULL)
 		{
 		//	printf("New token!\n");
